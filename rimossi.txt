@@ -1,0 +1,50 @@
+E adesso facciamo due conti, per primo calcoliamo l'accuratezza come: 
+
+$$
+\frac{TP+TN}{TP+TN+FP+FN}
+$$
+$$
+\frac{522+3829}{3829+483+830+522} \approx 77\% 
+$$
+
+Dato lo sbilanciamento del _Data Set_ verso i valori <= 50k il classificatore tende a sbagliare più spesso predicendo 0
+Conviene spostarci verso il calcolo di *Precison*,*Recall* ed *F-Measure* per la classe _negativa_
+
+$$
+\frac{TP}{TP+FP} = \frac{522}{522+483} \approx 52\%
+$$
+
+$$
+\frac{TP}{TP+FN} = \frac{522}{522+830} \approx 40\%
+$$
+
+$$
+\frac{2TP}{2TP+FN+FP} = \frac{2*522}{2*522+830+483} \approx 44\%
+$$
+
+Per la classe _positiva_, invece 
+$$
+\frac{TN}{TN+FN} = \frac{3829}{3829+830} \approx 82\%
+$$
+
+$$
+\frac{TN}{TN+FP} = \frac{3829}{3829+483} \approx 89\%
+$$
+
+$$
+\frac{2TN}{2TN+FN+FP} = \frac{2*3829}{2*3829+830+483} \approx 85\%
+$$
+
+### Random Forest
+from sklearn.ensemble import RandomForestClassifier
+ran_frst = RandomForestClassifier(
+    n_estimators=100,
+    class_weight='balanced',
+    max_depth=10,
+    random_state=42
+)
+ran_frst.fit(x_train,y_train)
+
+
+y_pred = ran_frst.predict(x_test)
+mostra(y_test,y_pred,"Random Forest")
